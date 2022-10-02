@@ -1,5 +1,5 @@
 const {ethers} = require("hardhat");
-const {CRYPTO_DEVS_NFT_CONTRACT_ADDRESS} = require("../constants");
+const {CRYPTODEVS_NFT_CONTRACT_ADDRESS} = require("../constants");
 
 
 async function main()
@@ -14,7 +14,7 @@ async function main()
 
   const CryptoDevsDAO = await ethers.getContractFactory("CryptoDevsDAO");
   const cryptoDevsDAOdeployed = await CryptoDevsDAO.deploy(
-    fakeNftMarketplacedeployed.address,CRYPTO_DEVS_NFT_CONTRACT_ADDRESS,
+    fakeNftMarketplacedeployed.address,CRYPTODEVS_NFT_CONTRACT_ADDRESS,
     {
       value: ethers.utils.parseEther("0"),
     }
