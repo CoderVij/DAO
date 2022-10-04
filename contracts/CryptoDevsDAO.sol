@@ -8,7 +8,7 @@ import "./IFakeNFTMarketPlace.sol";
 
 contract CryptoDevsDAO is Ownable
 {
-    struct Porposal
+    struct Proposal
     {
         uint256 nftTokenId;
         uint256 deadline;
@@ -18,7 +18,7 @@ contract CryptoDevsDAO is Ownable
         mapping(uint256 => bool) voters;
     }
 
-    mapping(uint256 => Porposal) proposals;
+    mapping(uint256 => Proposal) public proposals;
     uint256 public numProposals;
 
     IFakeNFTMarketplace nftMarketPlace;
@@ -40,12 +40,11 @@ contract CryptoDevsDAO is Ownable
     {
         require(nftMarketPlace.available(_nftTokenId), "NFT not for sale");
 
-        Porposal storage proposal = proposals[numProposals];
+        Proposal storage proposal = proposals[numProposals];
         proposal.nftTokenId = _nftTokenId;
-        proposal.deadline = block.timestamp + 1 minutes;
+        proposal.deadline = block.timestamp + 5 minutes;
 
         numProposals++;
-
         return  numProposals -1;
     }
 
@@ -63,13 +62,13 @@ contract CryptoDevsDAO is Ownable
 
     function  voteOnProposal(uint256 proposalIndex, Vote vote) external nftHolderOnly activeProposalOnly(proposalIndex)
     {
-        Porposal storage proposal = proposals[proposalIndex];
+        Proposal storage proposal = proposals[proposalIndex];
         uint256 voterNFTBalance = cryptoDevsNFT.balanceOf(msg.sender);
         uint256 numVotes = 0;
 
         for(uint256 i= 0; i < voterNFTBalance; i++)
         {
-            uint256 tokeId = cryptoDevsNFT.tokenOwnerByIndex(msg.sender, i);
+            uint256 tokeId = cryptoDevsNFT.tokenOfOwnerByIndex(msg.sender, i);
 
             if(proposal.voters[tokeId] == false)
             {
@@ -102,7 +101,7 @@ contract CryptoDevsDAO is Ownable
 
     function executeProposal(uint256 proposalIndex) external nftHolderOnly inactiveProposalOnly(proposalIndex)
     {
-        Porposal storage proposal = proposals[proposalIndex];
+        Proposal storage proposal = proposals[proposalIndex];
 
         if(proposal.yayVotes > proposal.nayVotes)
         {

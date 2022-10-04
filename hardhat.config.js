@@ -10,6 +10,9 @@ module.exports = {
     goerli: {
       url: ALCHEMY_HTTP_URL,
       accounts: [PRIVATE_KEY],
+      allowUnlimitedContractSize: true,
+      gas: 2100000,
+      gasPrice: 8000000000,
     },
   },
 };
